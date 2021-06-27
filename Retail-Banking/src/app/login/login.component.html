@@ -1,0 +1,38 @@
+
+<html lang="en">
+
+    <body>
+    
+        <div class="main">
+    
+            <section class="login">
+               
+                <div class="container">
+                    <div class="login-content">
+                        <form method="POST" id="login-form" class="login-form">
+                            <h2 class="form-title">Login</h2>
+                            <div class="form-group">
+                                <input type="text" class="form-input" name="name" id="name" placeholder="Your UserName"/>
+                            </div>
+                            
+                            <div class="form-group">
+                                <input type="text" class="form-input" name="password" id="password" placeholder="Password"/>
+                                <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
+                            </div>
+                    
+                            <div class="form-group">
+                                <button type="submit" name="submit" id="submit" (click)="onlogin()" class="form-submit" >LOGIN</button>
+                            </div>
+                        </form>
+                        <p class="loginhere">
+                            New User ? <a routerLink="/registration" class="loginhere-link">Register Now</a>
+                        </p>
+                    </div>
+                </div>
+            </section>
+    
+        </div>
+    
+       
+    </body>
+    </html>
