@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { LoginComponent } from './login/login.component';
-import { RegistrationComponent } from './registration/registration.component';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 
@@ -14,7 +13,6 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
     AppComponent,
     WelcomePageComponent,
     LoginComponent,
-    RegistrationComponent,
     AccountDetailsComponent,
     LandingPageComponent
   ],
