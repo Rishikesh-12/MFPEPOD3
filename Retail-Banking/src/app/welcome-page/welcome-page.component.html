@@ -1,19 +1,19 @@
 <body>
-<h1>RETAIL BANK</h1>
 <nav class="nav-bar">
     <div class="nav-items">
-        <div class="dropdown-menu">
-            <button class="menu-btn">My Account </button>
-            <div class="menu-content">
-            <a class="links-hidden" routerLink="/account-details">Account Details</a>
-            <a class="links-hidden" routerLink="#">Account Creation status</a>
-            <a class="links-hidden" routerLink="#">Mini Statement</a>
-            <a class="links-hidden" routerLink="#">Transaction Status</a>
-            </div>
-            </div>
+        
             <a class="links" routerLink="/registration">Customer</a>
             <a class="links" routerLink="/login">Transact Money</a>
             <a class="links" routerLink="#">About Us</a>
+            <div class="dropdown-menu">
+                <button class="menu-btn">My Account </button>
+                <div class="menu-content">
+                <a class="links-hidden" routerLink="/account-details">Account Details</a>
+                <a class="links-hidden" routerLink="#">Account Creation status</a>
+                <a class="links-hidden" routerLink="#">Mini Statement</a>
+                <a class="links-hidden" routerLink="#">Transaction Status</a>
+                </div>
+                </div>
            <button type="submit" class="logout-btn" name="logout"  (click)="onlogout();" >Logout</button>
             
     </div>  
