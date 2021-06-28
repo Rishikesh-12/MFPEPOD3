@@ -13,7 +13,7 @@ export class WelcomePageComponent implements OnInit {
   ngOnInit(): void {
   }
   public onlogout(){
-    this.router.navigate(['./login'])
+    this.router.navigate(['./landing-page'])
   }
   }
 
