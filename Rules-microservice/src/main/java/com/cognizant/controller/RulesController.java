@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cognizant.dto.RulesRequest;
 import com.cognizant.dto.RulesStatus;
 import com.cognizant.model.Account;
 import com.cognizant.service.RulesService;
@@ -26,26 +27,22 @@ import lombok.AllArgsConstructor;
 public class RulesController {
 
 	@Autowired
-	private final RulesService service;
+	private final RulesService ruleService;
 
-	@GetMapping("/evaluateMinBal/{id}/{balance}")
-	@ResponseBody
-	public RulesStatus evaluate(@PathVariable String id, @PathVariable double balance) {
-		Optional<Account> acc = service.getAccount(id);
-		if (acc.isEmpty())
-			return new RulesStatus("Not Available");
-		else {
-			
-			String status= service.evaluate(id, balance);
-			return new RulesStatus(status);
-			
-		}
+	@GetMapping("/evaluateMinBal")
+	public ResponseEntity<String> evaluate(@RequestBody RulesRequest rulesRequest) {
+		boolean status  = ruleService.evaluate(rulesRequest);
+		String rulesStatus;
+		if (status == true) rulesStatus = "allowed"; 
+		else rulesStatus = "denied";
+		return new ResponseEntity<>(rulesStatus,HttpStatus.OK);
+		
 	}
-	@GetMapping("/getServiceCharges/{id}/{balance}")
+	@GetMapping("/getServiceCharges")
 	@ResponseBody
 	public float serviceCharges(@PathVariable String id, @PathVariable double balance) {
 		
-		float charge= service.getCharge(id,balance);
+		float charge= ruleService.getCharge(id,balance);
 		return charge;
 		
 	}

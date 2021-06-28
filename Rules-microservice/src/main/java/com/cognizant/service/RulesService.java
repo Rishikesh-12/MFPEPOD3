@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.cognizant.dto.RulesRequest;
 import com.cognizant.model.Account;
 import com.cognizant.repo.AccountRepository;
 
@@ -22,10 +23,11 @@ public class RulesService {
 			return repo.findById(id);
 		}
 		
-	public String evaluate(String id, double balance){
+	public boolean evaluate(RulesRequest rulesRequest){
+		double balance = rulesRequest.getCurrentBalance() - rulesRequest.getAmount();
 		if(balance < minBalance)
-			return "Denied";
-		return "Allowed";
+			return false;
+		return true;
 	}
 	
 	public float getCharge(String id, double balance) {
