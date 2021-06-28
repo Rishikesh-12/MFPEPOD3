@@ -7,6 +7,7 @@ import { WelcomePageComponent } from './welcome-page/welcome-page.component';
 import { LoginComponent } from './login/login.component';
 import { AccountDetailsComponent } from './account-details/account-details.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { UserLoginComponent } from './user-login/user-login.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
     WelcomePageComponent,
     LoginComponent,
     AccountDetailsComponent,
-    LandingPageComponent
+    LandingPageComponent,
+    UserLoginComponent
   ],
   imports: [
     BrowserModule,
