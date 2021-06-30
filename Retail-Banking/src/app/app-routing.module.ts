@@ -11,6 +11,10 @@ import { LoginComponent } from './login/login.component';
 import { MiniStatementComponent } from './mini-statement/mini-statement.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { UpdateComponent } from './update/update.component';
+import { CustomerComponent } from './customer/customer.component';
+import { WithdrawComponent } from './withdraw/withdraw.component';
+import { TransferMoneyComponent } from './transfer-money/transfer-money.component';
+import { TransactionsComponent } from './transactions/transactions.component';
 
 const routes: Routes = [
   {
@@ -60,7 +64,11 @@ const routes: Routes = [
   {
     path:'statement',
     component:MiniStatementComponent
-  }
+  },
+  {path:'customer',component:CustomerComponent},
+  {path:'withdraw',component:WithdrawComponent},
+  {path:'transfer-money',component:TransferMoneyComponent},
+  {path:'transactions',component:TransactionsComponent}
 ];
 
 @NgModule({

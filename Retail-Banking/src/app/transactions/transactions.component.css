@@ -1,0 +1,76 @@
+
+body{
+    font-family: monospace;
+  }
+  
+  .navbar{
+    background-color:  rgb(128, 149, 242);
+  }
+  
+  @media (max-width: 991px) {
+    .navbar:not(.top-nav-collapse) {
+      background: linear-gradient(90deg, rgba(159,172,230) 0%,  rgba(116,235,213) 100%) !important;
+    }
+  }
+  .nav-link, .navbar-brand{
+    color: white;
+
+  }
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin-left: 20px;
+}
+ 
+th, td {
+    padding: 20px;
+}
+ 
+th {
+    text-align: left;
+}
+  .main-img{
+     height: 500px;
+     width: 700px;
+     margin:12px auto;
+     background-image: url(transactions.jpg);
+     background-size: cover;
+     float: left;
+  }
+  .functions{
+      padding-top: 70px;
+      padding-left: 250px;
+  }
+  .links-hidden{
+    display: inline-block;
+ }
+ .links{
+    display: inline-block;
+    padding-left: 40px;
+    padding-right: 40px;
+    color:black;
+    font-weight: bolder;
+ }
+ .links-hidden:hover,.links:hover {
+    background-color: rgb(149, 157, 240);
+
+ }
+ .transaction-detail{
+    height: 420px;
+    width: 600px;
+    margin:90px auto;
+    margin-left: 700px;
+    border: 2px solid #dddddd;
+    border-radius: 3px;
+    background-color: rgb(179, 184, 226);
+ }
+ .transactionh1{
+     font-weight: bold;
+     font-size: 30px;
+     text-align: center;
+     color:rgb(32, 32, 204)
+     }
+.recent-trans-detail{
+    text-align: center;
+    margin-top: 24px;
+}

@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css?family=Baloo+Bhaijaan|Ubuntu');
+body{
+    font-family: monospace;
+  }
+  
+  .navbar{
+    background-color:  rgb(128, 149, 242);
+  }
+  
+  @media (max-width: 991px) {
+    .navbar:not(.top-nav-collapse) {
+      background: linear-gradient(90deg, rgba(159,172,230) 0%,  rgba(116,235,213) 100%) !important;
+    }
+  }
+  .nav-link, .navbar-brand{
+    color: white;
+
+  }
+  .main-img{
+     height: 500px;
+     width: 700px;
+     margin:20px auto;
+     background-image: url(withdraw.jpg);
+     background-size: cover;
+     float: left;
+  }
+  .functions{
+      padding-top: 70px;
+      padding-left: 250px;
+  }
+  .links-hidden{
+    display: inline-block;
+ }
+ .links{
+    display: inline-block;
+    padding-left: 40px;
+    padding-right: 40px;
+    color:black;
+    font-weight: bolder;
+ }
+ .links-hidden:hover,.links:hover {
+    background-color: rgb(149, 157, 240);
+
+ }
+ .withdraw{
+    height: 500px;
+    width: 600px;
+    margin:40px auto;
+    margin-left: 700px;
+    
+ }
+ .withdraw-h2{
+     margin-top: 16px;
+     font-weight: bolder;
+ }
+ 
+.payment{
+    background: #9d8dd8;
+    width: 500px;
+    margin: 80px auto;
+    height: auto;
+    padding: 35px;
+    padding-top: 45px;
+    border-radius: 5px;
+    position: relative;
+  }
+  
+  .payment h2{
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+    color: #0d3c61;
+  }
+  
+  .form .label{
+    display: block;
+    color: #4e4646;
+    margin-bottom: 6px;
+    font-weight: bolder;
+  }
+  
+  .input{
+    padding: 13px 0px 13px 25px;
+    width: 100%;
+    text-align: center;
+    font-weight: bolder;
+    border: 2px solid #dddddd;
+    border-radius: 5px;
+    letter-spacing: 1px;
+    word-spacing: 3px;
+    outline: none;
+    font-size: 16px;
+    color: #0a0a0a;
+  }
+  
+  .card-grp{
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .card-item{
+    width: 48%;
+  }
+  
+  .space{
+    margin-bottom: 20px;
+  }
+  
+  .icon-relative{
+    position: relative;
+  }
+  
+  .icon-relative .fas,
+  .icon-relative .far{
+    position: absolute;
+    bottom: 12px;
+    left: 15px;
+    font-size: 20px;
+    color: #555555;
+  }
+  
+  .btn{
+    margin-top: 40px;
+    background: #2196F3;
+    padding: 13px;
+    margin-left:160px;
+    text-align: center;
+    color: #f8f8f8;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bolder;
+    
+  }
+  .btn:hover{
+      background-color:navy;
+  }
+  
+  
+  .payment-logo{
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 100px;
+    background: #f8f8f8;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    text-align: center;
+    line-height: 85px;
+  }
+  
+  .payment-logo:before{
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 90px;
+    height: 90px;
+    background: #2196F3;
+    border-radius: 50%;
+  }
+  
+  .payment-logo p{
+    position: relative;
+    color: #1a0231;
+    font-family: 'Baloo Bhaijaan', cursive;
+    font-size: 16px;
+  }
+ 
