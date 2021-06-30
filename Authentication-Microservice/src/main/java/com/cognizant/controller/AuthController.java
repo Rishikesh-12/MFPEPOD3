@@ -38,11 +38,11 @@ public class AuthController {
 	private Validationservice validationService;
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@RequestBody AuthUsers authUser)
+	public ResponseEntity<AuthUsers> login(@RequestBody AuthUsers authUser)
 			throws UsernameNotFoundException, AppUserNotFoundException {
 		AuthUsers user = loginService.userLogin(authUser);
 		log.info("Credentials :{}", user.getAuthToken());
-		return new ResponseEntity<>(user.getAuthToken(), HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
 	}
 
 	@GetMapping("/validateToken")

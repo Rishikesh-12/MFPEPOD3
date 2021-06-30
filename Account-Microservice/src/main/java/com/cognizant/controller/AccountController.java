@@ -90,7 +90,7 @@ public class AccountController {
 	}
 	
 	@PostMapping("/deposit")
-	public ResponseEntity<Account> deposit(@RequestHeader("Authorization") String auth,
+	public ResponseEntity<?> deposit(@RequestHeader("Authorization") String auth,
 			@RequestBody AccountInput accountInput) {
 		log.info("Inside Deposit Method");
 		accountServiceImpl.hasPermission(auth);
@@ -99,26 +99,28 @@ public class AccountController {
 		List<Transaction> list = transactionFeign.getTransactionsByAccountNumber(auth, accountInput.getAccountNumber());
 		updateBalance.setTransactions(list);
 		log.info("Amount Deposited Successfully");
-		return new ResponseEntity<>(updateBalance, HttpStatus.OK);
+		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 
 	@PostMapping("/withdraw")
-	public ResponseEntity<Account> withdraw(@RequestHeader("Authorization") String auth,
+	public ResponseEntity<?> withdraw(@RequestHeader("Authorization") String auth,
 			@RequestBody AccountInput accountInput) {
 		log.info("Inside Withdraw Method");
 		accountServiceImpl.hasPermission(auth);
+		boolean status=true;
 		try {
 			transactionFeign.makeWithdraw(auth, accountInput);
 
 		} catch (Exception e) {
-			throw new MinimumBalanceException("Minimum Balance 1000 should be maintaind");
+			status = false;
+			return new ResponseEntity<>(status, HttpStatus.NOT_ACCEPTABLE);
 		}
 		Account updatedBalance = accountServiceImpl.updateBalance(accountInput);
 		List<Transaction> transactions = transactionFeign.getTransactionsByAccountNumber(auth,
 				accountInput.getAccountNumber());
 		updatedBalance.setTransactions(transactions);
 		log.info("Amount withdraw sucessful");
-		return new ResponseEntity<>(updatedBalance, HttpStatus.OK);
+		return new ResponseEntity<>(status, HttpStatus.OK);
 	}
 
 	@PostMapping("/servicecharge")
@@ -130,7 +132,7 @@ public class AccountController {
 			transactionFeign.makeServiceCharges(auth, accountInput);
 
 		} catch (Exception e) {
-			throw new MinimumBalanceException("Minimum Balance 1000 should be maintaind");
+			throw new MinimumBalanceException("Minimum Balance 2000 should be maintaind");
 		}
 		Account updatedBalance = accountServiceImpl.updateBalance(accountInput);
 		List<Transaction> transaction = transactionFeign.getTransactionsByAccountNumber(auth,
@@ -141,7 +143,7 @@ public class AccountController {
 	}
 
 	@PostMapping("/transfer")
-	public ResponseEntity<String> transfer(@RequestHeader("Authorization") String auth,
+	public ResponseEntity<?> transfer(@RequestHeader("Authorization") String auth,
 			@RequestBody TransactionInput transactionInput) {
 		log.info("Inside Transfer Method");
 		accountServiceImpl.hasPermission(auth);
@@ -150,10 +152,10 @@ public class AccountController {
 			status = transactionFeign.makeTransfer(auth, transactionInput);
 
 		} catch (Exception e) {
-			throw new MinimumBalanceException("Minimum Balance 1000 should be maintained");
+			return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
 		}
 		if (status == false) {
-			return new ResponseEntity<>("Transaction Failed", HttpStatus.NOT_IMPLEMENTED);
+			return new ResponseEntity<>(false, HttpStatus.NOT_IMPLEMENTED);
 		}
 		Account updatedSourceBalance = accountServiceImpl.updateBalance(transactionInput.getSourceAccount());
 		List<Transaction> sourcelist = transactionFeign.getTransactionsByAccountNumber(auth,
@@ -165,9 +167,7 @@ public class AccountController {
 				transactionInput.getTargetAccount().getAccountNumber());
 		updatedTargetBalance.setTransactions(targetlist);
 		log.info("Transfer Completed Successfully");
-		return new ResponseEntity<>("Transaction Made Successfully From Source Account Number"
-				+ transactionInput.getSourceAccount().getAccountNumber() + " To Account Number "
-				+ transactionInput.getTargetAccount().getAccountNumber() + " ", HttpStatus.OK);
+		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 	
 	@PutMapping("/updateAccount")

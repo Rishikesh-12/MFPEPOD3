@@ -39,10 +39,13 @@ public class AccountServiceImpl implements AccountService {
 			return accountCreationStatus;
 		} else {
 //			account.setUsername(customerFeign.getCustomerDetails(auth,customerId).getUsername());
-			accountRepository.save(account);
-			AccountCreationStatus accountCreationStatus = new AccountCreationStatus(account.getAccountNumber(),
-					"Account Created Sucessfully");
-			log.info("Account Created Sucessfully");
+			AccountCreationStatus accountCreationStatus = null;
+			if(account.getBalance()>=2000) { 
+				accountRepository.save(account);
+				accountCreationStatus = new AccountCreationStatus(account.getAccountNumber(),
+						"Account Created Sucessfully");
+				log.info("Account Created Sucessfully");
+			}
 			return accountCreationStatus;
 		}
 	}

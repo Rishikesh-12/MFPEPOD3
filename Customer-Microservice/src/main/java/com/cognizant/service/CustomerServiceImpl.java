@@ -48,6 +48,8 @@ public class CustomerServiceImpl implements CustomerService {
 			AuthUser user = new AuthUser(customer.getUserId(), customer.getUsername(), passwordEncoder.encode(password),
 					null, "CUSTOMER");
 			authorizationFeign.createUser(user);
+//			Account acc = new Account(0L,customer.getUserId(),2000.0,"Savings",customer.getUsername(),null);
+//			accountFeign.createAccount(auth, customer.getUserId(), acc);
 		}
 		customer.setPassword(passwordEncoder.encode(password));
 		for (Account account : customer.getAccounts()) {

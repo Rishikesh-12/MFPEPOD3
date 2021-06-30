@@ -41,7 +41,7 @@ public class Customer {
 	private String password;
 
 	@Column(name = "dateOfBirth")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	private Date dateOfBirth;
 
 	@Column(name = "pannumber", length = 10)

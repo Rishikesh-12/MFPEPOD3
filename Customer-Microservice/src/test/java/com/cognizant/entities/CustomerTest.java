@@ -16,14 +16,14 @@ public class CustomerTest {
 
 	@Test
 	void setUserNameTest() {
-		customer.setUsername("Rekha");
-		assertEquals("Rekha", customer.getUsername());
+		customer.setUsername("Don");
+		assertEquals("Don", customer.getUsername());
 	}
 
 	@Test
 	void setAddressTest() {
-		customer.setAddress("Rekha");
-		assertEquals("Rekha", customer.getAddress());
+		customer.setAddress("Don");
+		assertEquals("Don", customer.getAddress());
 	}
 
 	@Test
@@ -46,8 +46,8 @@ public class CustomerTest {
 
 	@Test
 	void getUserNameTest() {
-		customer.setUsername("Rekha");
-		assertEquals("Rekha", customer.getUsername());
+		customer.setUsername("Don");
+		assertEquals("Don", customer.getUsername());
 	}
 
 	@Test

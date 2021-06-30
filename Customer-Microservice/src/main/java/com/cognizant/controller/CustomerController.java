@@ -60,7 +60,7 @@ public class CustomerController {
 		customerServiceImpl.hasPermission(auth);
 		Customer toReturnCustomerDetails = customerServiceImpl.getCustomerDetail(auth, userId);
 		if (toReturnCustomerDetails == null)
-			return new ResponseEntity<>("Customer UserId " + userId + " Does Not Exist", HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
 		toReturnCustomerDetails.setPassword(null);
 		return new ResponseEntity<>(toReturnCustomerDetails, HttpStatus.OK);
 	}
@@ -73,13 +73,13 @@ public class CustomerController {
 		Customer check = null;
 		check = customerServiceImpl.getCustomerDetail(auth, userId);
 		if (check == null) {
-			return new ResponseEntity<>("Customer UserId Does Not Exisit", HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
 		}
 
 		log.debug("Starting deletion of {}",userId);
 		customerServiceImpl.deleteCustomer(userId);
 		log.info("Deleted");
-		return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
+		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 
 }
