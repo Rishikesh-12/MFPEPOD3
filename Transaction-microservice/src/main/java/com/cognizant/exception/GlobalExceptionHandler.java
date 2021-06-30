@@ -2,7 +2,7 @@ package com.cognizant.exception;
 
 
 import java.net.ConnectException;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+
+import com.cognizant.models.TransactionErrorResponse;
 
 import feign.FeignException;
 
@@ -23,7 +25,7 @@ public class GlobalExceptionHandler {
 	 */
 	@ExceptionHandler(MinimumBalanceException.class)
 	public ResponseEntity<TransactionErrorResponse> nullPointer(MinimumBalanceException exception, WebRequest request) {
-		TransactionErrorResponse response = new TransactionErrorResponse(new Date() ,HttpStatus.NOT_ACCEPTABLE ,exception.getMessage() ,"Access Denied");
+		TransactionErrorResponse response = new TransactionErrorResponse(LocalDateTime.now() ,HttpStatus.NOT_ACCEPTABLE ,exception.getMessage() ,"Access Denied");
 		return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
 	}
 	
@@ -33,7 +35,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({ FeignException.class })
     public ResponseEntity<TransactionErrorResponse> handleFeignException(FeignException ex) {
-    	TransactionErrorResponse response = new TransactionErrorResponse(new Date() ,HttpStatus.INTERNAL_SERVER_ERROR ,ex.getMessage() ,"Server Down Try Later..." );
+    	TransactionErrorResponse response = new TransactionErrorResponse(LocalDateTime.now() ,HttpStatus.INTERNAL_SERVER_ERROR ,ex.getMessage() ,"Server Down Try Later..." );
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     /**
@@ -43,7 +45,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({ ConnectException.class })
     public ResponseEntity<TransactionErrorResponse> handleConnectException(ConnectException ex) {
-    	TransactionErrorResponse response = new TransactionErrorResponse(new Date() ,HttpStatus.INTERNAL_SERVER_ERROR ,ex.getMessage() ,"Connection Error..." );
+    	TransactionErrorResponse response = new TransactionErrorResponse(LocalDateTime.now() ,HttpStatus.INTERNAL_SERVER_ERROR ,ex.getMessage() ,"Connection Error..." );
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

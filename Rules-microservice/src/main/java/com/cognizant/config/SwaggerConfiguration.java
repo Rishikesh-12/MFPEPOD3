@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.cognizant.config;
 
 import org.springframework.context.annotation.Bean;
@@ -15,11 +12,6 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import static springfox.documentation.builders.PathSelectors.regex;
 import static com.google.common.base.Predicates.or;
-
-/**
- * @author Rishikesh
- *
- */
 
 @Configuration
 @EnableSwagger2
@@ -36,8 +28,8 @@ public class SwaggerConfiguration {
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("Rules Microservice")
-				.description("API refernece for Rules Microservice by Rishikesh").termsOfServiceUrl("http://www.google.co.in")
-				.license("MIIT Licence").licenseUrl("").version("0.0.1").build();
+		return new ApiInfoBuilder().title("Rules Microservice").description("API refernece for developers")
+				.termsOfServiceUrl("http://www.google.co.in").license("MIIT Licence")
+				.version("0.0.1").build();
 	}
 }

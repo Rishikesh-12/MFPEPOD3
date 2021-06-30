@@ -1,27 +1,23 @@
 package com.cognizant.service;
 
-import java.util.Optional;
+import javax.mail.MessagingException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.cognizant.entities.Customer;
+import com.cognizant.model.AuthenticationResponse;
 
-import com.cognizant.model.Customer;
-import com.cognizant.repository.CustomerRepository;
+public interface CustomerService {
 
-@Service
-public class CustomerService {
-	@Autowired
-	private CustomerRepository repo;
-	
-	public int createCustomer(Customer customer) {
-		repo.save(customer);
-		return customer.getId();
-	}
-	
-	public Customer getCustomer(int id) {
-		Optional<Customer> customer= repo.findById(id);
-		if(customer.isEmpty())
-			return null;
-		return customer.get();
-	}
+	public Customer createCustomer(String auth, Customer customer) throws MessagingException;
+
+	public Customer getCustomerDetail(String auth, String userId);
+
+	public boolean deleteCustomer(String userId);
+
+	public Customer updateCustomer(String auth, Customer customer) throws MessagingException;
+
+	public AuthenticationResponse hasCustomerPermission(String auth);
+
+	public AuthenticationResponse hasAdminPermission(String auth);
+
+	public AuthenticationResponse hasPermission(String auth);
 }

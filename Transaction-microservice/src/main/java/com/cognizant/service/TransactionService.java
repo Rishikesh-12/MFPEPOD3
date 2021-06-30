@@ -1,20 +1,15 @@
 package com.cognizant.service;
 
-import java.util.List;
-
-import com.cognizant.dto.DepositOrWithdrawRequest;
-import com.cognizant.dto.TransferRequest;
-import com.cognizant.model.Transaction;
+import com.cognizant.util.AccountInput;
+import com.cognizant.util.TransactionInput;
 
 public interface TransactionService {
 
-	public boolean transfer(String auth, TransferRequest transferRequest);
+	public boolean makeTransfer(String token, TransactionInput transactionInput);
 
-	public boolean withdraw(String auth, DepositOrWithdrawRequest withdrawRequest);
+	public boolean makeWithdraw(String token, AccountInput accountInput);
 
-	public boolean deposit(String auth, DepositOrWithdrawRequest depositRequest);
-
-	public List<Transaction> getTransactions(String auth, long accountno);
-//	public boolean deductServiceCharges(String auth, WDAccountInput accountInput);
-
+	public boolean makeDeposit(String token, AccountInput accountInput);
+	
+	public boolean makeServiceCharges(String token, AccountInput accountInput);
 }

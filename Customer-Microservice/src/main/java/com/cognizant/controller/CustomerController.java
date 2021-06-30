@@ -1,43 +1,85 @@
 package com.cognizant.controller;
 
+import java.net.BindException;
+import java.time.DateTimeException;
+
+import javax.mail.MessagingException;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
-import com.cognizant.dto.AccountCreationStatus;
-import com.cognizant.dto.CreationStatus;
-import com.cognizant.model.Customer;
-import com.cognizant.service.CustomerService;
+import com.cognizant.entities.Customer;
+import com.cognizant.service.CustomerServiceImpl;
 
-@RestController("/api")
+import lombok.extern.slf4j.Slf4j;
+
+@RestController
+@Slf4j
+@RequestMapping("/bankapi")
 public class CustomerController {
+
 	@Autowired
-	private CustomerService service;
-	
-	@PostMapping("/customer")
-	public CreationStatus registerCustomer(@RequestBody Customer customer){
-		System.out.println(customer.toString());
-		int id=service.createCustomer(customer);
-		String url="http://localhost:8081/api/account/"+String.valueOf(id);
-		RestTemplate restTemplate =new RestTemplate();
-		restTemplate.exchange(url, HttpMethod.POST, null, AccountCreationStatus.class);
-		CreationStatus cs=new CreationStatus(id, "Account Created Succesfully");
-		return cs;
+	private CustomerServiceImpl customerServiceImpl;
+
+	@PostMapping("/createCustomer")
+	public ResponseEntity<?> createCustomer(@RequestHeader("Authorization") String auth,
+			@Valid @RequestBody Customer customer)throws DateTimeException{
+		log.info("Creating a customer");
+		log.info(auth);
+		customerServiceImpl.hasAdminPermission(auth);
+		Customer newCustomer = customerServiceImpl.createCustomer(auth, customer);
+		if (newCustomer != null)
+			return new ResponseEntity<>(true, HttpStatus.CREATED);
+		else
+			return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
 	}
-	
-	@GetMapping("/customer/{id}")
-	public Customer getCustomerDetails(@PathVariable("id") int id) {
-		Customer customer = service.getCustomer(id);
-		if(customer==null)
-			return null;
-		return customer;
+
+	@PostMapping("/updateCustomer")
+	public Customer updateCustomer(@RequestHeader("Authorization") String auth, @Valid @RequestBody Customer customer) throws MessagingException {
+		log.info("Updating the customer");
+		customerServiceImpl.hasAdminPermission(auth);
+		return customerServiceImpl.updateCustomer(auth, customer);
 	}
+
+	@GetMapping("/getCustomerDetails/{userId}")
+	public ResponseEntity<?> getCustomerDetails(@RequestHeader("Authorization") String auth,
+			@PathVariable String userId) {
+		log.info("Getting Customer Details");
+		customerServiceImpl.hasPermission(auth);
+		Customer toReturnCustomerDetails = customerServiceImpl.getCustomerDetail(auth, userId);
+		if (toReturnCustomerDetails == null)
+			return new ResponseEntity<>("Customer UserId " + userId + " Does Not Exist", HttpStatus.NOT_ACCEPTABLE);
+		toReturnCustomerDetails.setPassword(null);
+		return new ResponseEntity<>(toReturnCustomerDetails, HttpStatus.OK);
+	}
+
+	@DeleteMapping("deleteCustomer/{userId}")
+	public ResponseEntity<?> deleteCustomer(@RequestHeader("Authorization") String auth, @PathVariable String userId) {
+		log.info("Deleting Customer Details");
+		customerServiceImpl.hasAdminPermission(auth);
+
+		Customer check = null;
+		check = customerServiceImpl.getCustomerDetail(auth, userId);
+		if (check == null) {
+			return new ResponseEntity<>("Customer UserId Does Not Exisit", HttpStatus.NOT_ACCEPTABLE);
+		}
+
+		log.debug("Starting deletion of {}",userId);
+		customerServiceImpl.deleteCustomer(userId);
+		log.info("Deleted");
+		return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
+	}
+
 }

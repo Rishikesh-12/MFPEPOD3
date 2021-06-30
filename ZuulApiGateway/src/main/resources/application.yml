@@ -1,0 +1,28 @@
+zuul:
+ ignoredServices: '*'
+ routes:
+  authentication-ms:
+   path: /authentication-ms/**
+   serviceId: authentication-ms
+   sensitive-headers:
+    - Cookie,Set-Cookie,Authorization
+  customer-ms:
+   path: /customer-ms/**
+   serviceId: customer-ms
+   sensitive-headers:
+    - Cookie,Set-Cookie,Authorization
+  account-ms:
+   path: /account-ms/**
+   serviceId: account-ms
+   sensitive-headers:
+    - Cookie,Set-Cookie,Authorization
+  transaction-ms:
+   path: /transaction-ms/**
+   serviceId: transaction-ms
+   sensitive-headers:
+    - Cookie,Set-Cookie,Authorization
+  rules-ms:
+   path: /rules-ms/**
+   serviceId: rules-ms
+   sensitive-headers:
+    - Cookie,Set-Cookie,Authorization

@@ -1,21 +1,44 @@
 package com.cognizant.model;
 
-import javax.persistence.Entity;
+import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Entity
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Account {
+
+	/**
+	 * Account Entity used in Repository
+	 */
 	@Id
-	private String id;
-	private String ownerName;
+	@NotNull(message = "Enter Account Number")
+	private long accountNumber;
+
+	@NotNull(message = "Enter customerId")
+	private String customerId;
+
+	@NotNull(message = "Enter currentBalance")
 	private double balance;
-	private int custId;
-	private String type;
+
+	@NotNull(message = "Enter accountType")
+	private String accountType;
+
+	@Column(length = 20)
+	@NotNull(message = "Enter ownerName")
+	private String username;
+
+	@Transient
+	private List<Transaction> transactions;
+
 }
