@@ -1,0 +1,34 @@
+<div class="main">
+    <div class="search">
+        <label>Enter the Customer Id:</label>
+        <input type="text" class="form-control" #inp aria-describedby="emailHelp">
+        <button class="btn btn-info" id="s" (click)="onSearch(inp.value)">Search</button>
+    </div>
+    <div class="result" id="print-statement">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Narration</th>
+                    <th>Reference No.</th>
+                    <th>Amount</th>
+                    <th>Deposit</th>
+                    <th>Withdraw</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of statements">
+                    <td>{{item.date}}</td>
+                    <td>{{item.narration}}</td>
+                    <td>{{item.reference}}</td>
+                    <td>Rs. {{item.amount | number:'1.1-2'}}</td>
+                    <td>Rs. {{item.deposit | number:'1.1-2'}}</td>
+                    <td>Rs. {{item.withdraw | number:'1.1-2'}}</td>
+                    <td>Rs. {{item.balance | number:'1.1-2'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="btn btn-success print" [style.display]="disp" printSectionId="print-statement" [useExistingCss]="true" ngxPrint>Print</button>
+</div>

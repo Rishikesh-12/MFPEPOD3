@@ -1,17 +1,66 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { WelcomePageComponent } from './welcome-page/welcome-page.component';
-import { AccountDetailsComponent } from './account-details/account-details.component';
+import { AccountViewComponent } from './account-view/account-view.component';
+import { AdminLoginComponent } from './admin-login/admin-login.component';
+import { CustomerHomeComponent } from './customer-home/customer-home.component';
+import { DepositWithdrawComponent } from './deposit-withdraw/deposit-withdraw.component';
+import { EmployeeHomeComponent } from './employee-home/employee-home.component';
+import { HomeComponent } from './home/home.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
-import { UserLoginComponent } from './user-login/user-login.component';
+import { LoginComponent } from './login/login.component';
+import { MiniStatementComponent } from './mini-statement/mini-statement.component';
+import { RegistrationComponent } from './registration/registration.component';
+import { UpdateComponent } from './update/update.component';
+
 const routes: Routes = [
-  {path:'',component:LandingPageComponent},
-  {path:'login',component:LoginComponent},
-  {path:'welcome-page',component:WelcomePageComponent},
-  {path:'account-details',component:AccountDetailsComponent},
-  {path:'landing-page',component:LandingPageComponent},
-  {path:'user-login',component:UserLoginComponent}
+  {
+    path:'register',
+    component:RegistrationComponent
+  },
+  {
+    path:'welcome',
+    component:CustomerHomeComponent
+  },
+  {
+    path:'update',
+    component:UpdateComponent
+  },
+  {
+    path:'update/:id',
+    component:UpdateComponent
+  },
+  {
+    path:'landing',
+    component:LandingPageComponent
+  },
+  {
+    path:'login',
+    component:LoginComponent
+  },
+  {
+    path:'admin',
+    component:AdminLoginComponent
+  },
+  {
+    path:'employee',
+    component:EmployeeHomeComponent
+  },
+  {
+    path:'home',
+    component:HomeComponent
+  },
+  {
+    path:'view',
+    component:AccountViewComponent
+  },
+  {
+    path:'deposit-withdraw',
+    component:DepositWithdrawComponent
+  },
+  {
+    path:'statement',
+    component:MiniStatementComponent
+  }
 ];
 
 @NgModule({

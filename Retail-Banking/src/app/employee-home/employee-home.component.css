@@ -1,0 +1,66 @@
+body {
+    font-family: monospace;
+}
+
+#first {
+    width: 600px;
+    height: 500px;
+    margin-top: 70px;
+    margin-left: 70px;
+    border-radius: 2px;
+}
+
+#second {
+    width: 750px;
+    height: 500px;
+    margin-top: 70px;
+    margin-left: 70px;
+}
+
+div {
+    float: left;
+}
+
+.cont {
+    background-color: rgb(245, 240, 240);
+    width: 1540px;
+    height: 663px;
+}
+
+h1 {
+    padding-top: 100px;
+}
+
+.login {
+    background: rgb(65, 236, 122);
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    border: 2px;
+}
+
+.about {
+    border-radius: 5px;
+    padding: 10px;
+    border: 2px solid rgb(128, 191, 242);
+    margin-left: 5px;
+    ;
+    cursor: pointer;
+    color: rgb(49, 175, 224);
+}
+
+.about:hover {
+    color: rgb(109, 233, 210);
+    border-color: rgb(109, 233, 210);
+}
+
+.login:hover {
+    background: white;
+    color: rgb(128, 149, 242);
+    border-color: rgb(128, 149, 242);
+}
+
+#main {
+    background-color: lightgray !important;
+}

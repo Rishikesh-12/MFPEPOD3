@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Retail Banking System</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="../../assets/images/favicon.png" rel="icon">
+    <link href="../../assets/images/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+
+    <!-- Template Main CSS File -->
+
+    <!-- =======================================================
+  * Template Name: KnightOne - v4.3.0
+  * Template URL: https://bootstrapmade.com/knight-simple-one-page-bootstrap-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top ">
+        <div class="container-fluid">
+
+            <div class="row justify-content-center">
+                <div class="col-xl-9 d-flex align-items-center justify-content-lg-between">
+                    <h1 class="logo me-auto me-lg-0"><a href="index.html">Retail Banking</a></h1>
+                    <!-- Uncomment below if you prefer to use an image logo -->
+                    <!-- <a href="index.html" class="logo me-auto me-lg-0"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+                    <nav id="navbar" class="navbar order-last order-lg-0">
+                        <ul>
+                            <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                            <li class="dropdown"><a href="#"><span>Trabsaction Services</span> <i class="bi bi-chevron-down"></i></a>
+                                <ul>
+                                    <li><a data-bs-toggle="modal" data-bs-target="#staticBackdrop">Deposit</a></li>
+                                    <li><a href="#">Withdraw</a></li>
+                                    <li><a href="#">Mini Statement</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown"><a href="#"><span>Customer Services</span> <i class="bi bi-chevron-down"></i></a>
+                                <ul>
+                                    <li><a routerLink='/register' routerLinkActive="active">Create Customer</a></li>
+                                    <li><a data-bs-toggle="modal" data-bs-target="#update">Update Customer</a></li>
+                                    <li><a data-bs-toggle="modal" data-bs-target="#delete">Delete Customer</a></li>
+                                    <li><a data-bs-toggle="modal" data-bs-target="#view">View Customer Accounts</a></li>
+                                </ul>
+                            </li>
+                            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                        </ul>
+                        <i class="bi bi-list mobile-nav-toggle"></i>
+                    </nav>
+                    <!-- .navbar -->
+
+                    <a href="#about" class="get-started-btn scrollto">Sign Out</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Header -->
+    <!-- ======= Hero Section ======= -->
+    <section id="hero" class="d-flex flex-column justify-content-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-8">
+                    <h1>Retail Banking - Making Transactions Easy</h1>
+                    <h2>We are team of employees solving cutomer issues</h2>
+                    <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="glightbox play-btn mb-4"></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Hero -->
+
+    <!-- Delete -->
+    <div class="modal fade" id="delete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Delete a Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="custid" class="form-label">Customer Id</label>
+                    <input type="text" class="form-control" id="custid" aria-describedby="emailHelp" #del>
+                    <div id="emailHelp" class="form-text">All the account associated with the give customer id wil be permanently deleted.</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteCustomer(del.value)">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update -->
+    <div class="modal fade" id="update" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Update a Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="custid" class="form-label">Customer Id</label>
+                    <input type="text" class="form-control" id="custid" aria-describedby="emailHelp" #upd ngModel>
+                    <div id="emailHelp" class="form-text">The customer details associated with the give customer id wil be updated.</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a type="button" class="btn btn-info" class="f" routerLink='/update/{{upd.value}}' routerLinkActive="active" data-bs-dismiss="modal">Update</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Customer Accounts -->
+    <div class="modal fade" id="view" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog" id="d">
+            <div class="modal-content" id="p">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Update a Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Customer Id</th>
+                                <th>Customer Name</th>
+                                <th>Account No.</th>
+                                <th>Balance</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of accounts">
+                                <td>{{item.custid}}</td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.accNo}}</td>
+                                <td>Rs. {{item.balance}}</td>
+                                <td><a type="button" class="btn btn-success f">Deposit</a></td>
+                                <td><a type="button" class="btn btn-info f">Withdraw</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a type="button" class="btn btn-info f" routerLink='/update/{{upd.value}}' routerLinkActive="active" data-bs-dismiss="modal">Update</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template Main JS File -->
+    <script src="../../assets/main.js"></script>
+
+</body>
+
+</html>

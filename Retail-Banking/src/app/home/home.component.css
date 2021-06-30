@@ -7,7 +7,7 @@ body {
 }
 
 .navbar {
-    background-color: rgb(128, 149, 242);
+    background-color: rgb(138, 104, 230);
 }
 
 @media (max-width: 991px) {
@@ -58,5 +58,20 @@ iframe {
 .hd:hover {
     background-color: white;
     color: violet;
+    cursor: pointer;
+}
+
+.log {
+    margin-right: 30px;
+}
+
+iframe {
+    margin-top: 0px;
+    height: 663px;
+    width: 1540px;
+    background-color: lightgray;
+}
+
+a {
     cursor: pointer;
 }

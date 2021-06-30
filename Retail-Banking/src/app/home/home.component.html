@@ -1,0 +1,95 @@
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+<body>
+    <nav class="navbar navbar-expand-lg ">
+        <a class="navbar-brand" href="#">
+            The Great Bank
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link " href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Customer Services
+                        </a>
+                            <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+                                <li><a class="dropdown-item" (click)="onCustomer('create')">Create Customer</a></li>
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete">Delelte Customer</a></li>
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#update">Update Customer</a></li>
+                                <li><a class="dropdown-item" (click)="onCustomer('view')">View Customer Accounts</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link " href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          Transaction Services
+                        </a>
+                            <ul class="dropdown-menu dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
+                                <li><a class="dropdown-item" (click)="onCustomer('deposit-withdraw')">Deposit and Withdraw</a></li>
+                                <li><a class="dropdown-item" (click)="onCustomer('statement')">Print Mini-Statement</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </ul>
+        </div>
+        <div class="d-flex log">
+            <button class="btn btn-outline-warning" type="submit">Logout</button>
+        </div>
+    </nav>
+
+    <main>
+        <iframe [src]="url | safe"></iframe>
+    </main>
+
+    <!-- Update -->
+    <div class="modal fade" id="update" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Update a Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="custid" class="form-label">Customer Id</label>
+                    <input type="text" class="form-control" id="custid" aria-describedby="emailHelp" #upd ngModel>
+                    <div id="emailHelp" class="form-text">The customer details associated with the give customer id wil be updated.</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" (click)="onUpdate(upd.value)" data-bs-dismiss="modal">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete -->
+    <div class="modal fade" id="delete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Delete a Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="custid" class="form-label">Customer Id</label>
+                    <input type="text" class="form-control" id="custid" aria-describedby="emailHelp" #del>
+                    <div id="emailHelp" class="form-text">All the account associated with the give customer id wil be permanently deleted.</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteCustomer(del.value)">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

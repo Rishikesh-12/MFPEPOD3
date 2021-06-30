@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<body>
+    <div class="container-fluid px-1 py-5 mx-auto main">
+        <div class="w3-container w3-center w3-animate-left" id="first">
+            <img src="../../assets/images/Add User-amico.svg">
+        </div>
+        <div class="card w3-animate-right">
+            <h5 class="text-center mb-4">Register a Customer</h5>
+            <form #addForm="ngForm" (ngSubmit)="addCustomer(addForm.value)">
+                <div class="row justify-content-between text-left">
+                    <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">First name<span class="text-danger"> *</span></label> <input type="text" id="fname" name="fname" placeholder="Enter your first name" ngModel> </div>
+                    <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">Last name<span class="text-danger"> *</span></label> <input type="text" id="lname" name="lname" placeholder="Enter your last name" ngModel> </div>
+                </div>
+                <div class="row justify-content-between text-left">
+                    <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">Target Date<span class="text-danger"> *</span></label> <input type="text" id="dob" name="dob" bsDatepicker placeholder="Date Of Birth" ngModel /> </div>
+                    <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">Phone number<span class="text-danger"> *</span></label> <input type="text" id="phone" name="phone" placeholder="Phone Number" ngModel> </div>
+                </div>
+                <div class="row justify-content-between text-left">
+                    <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">Email<span class="text-danger"> *</span></label> <input type="text" id="email" name="email" placeholder="Email" ngModel> </div>
+                    <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">Address<span class="text-danger"> *</span></label> <input type="text" id="address" name="address" placeholder="Full Address" (ngModel)="customer.address"> </div>
+                </div>
+                <div class="row justify-content-between text-left">
+                    <div class="form-group col-sm-6 flex-column d-flex"> <label class="form-control-label px-3">Pan Card<span class="text-danger"> *</span></label> <input type="text" id="panNo" name="panNo" placeholder="Pan Number" ngModel> </div>
+                </div>
+                <div class="form-group col-sm-6"> <button type="submit" class="btn-block btn-primary">Resgister</button> </div>
+
+            </form>
+        </div>
+    </div>
+</body>

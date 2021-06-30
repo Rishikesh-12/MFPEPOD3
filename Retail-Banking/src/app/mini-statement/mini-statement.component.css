@@ -1,0 +1,48 @@
+.search {
+    margin-top: 50px;
+    width: 1000px;
+    margin-left: 250px;
+    margin-bottom: 40px;
+}
+
+input,
+#s,
+.search,
+label {
+    float: left;
+}
+
+input {
+    width: 300px;
+    margin-left: 20px;
+}
+
+#s {
+    margin-left: 30px;
+}
+
+label {
+    margin-left: 150px;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 100;
+}
+
+.main {
+    background-color: rgb(245, 240, 240);
+    width: 1530px;
+    height: 660px;
+}
+
+.result {
+    width: 1300px;
+    margin-left: 120px;
+}
+
+.print {
+    float: right;
+    width: 80px;
+    font-size: 20px;
+    height: 40px;
+    margin-right: 150px;
+}
