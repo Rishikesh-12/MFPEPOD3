@@ -43,7 +43,8 @@ public class CustomerServiceImpl implements CustomerService {
 		Customer customerCheck = getCustomerDetail(auth, customer.getUserId());
 		String password = customer.getPassword();
 		if (customerCheck != null) {
-			throw new ConsumerAlreadyExistException("Customer Already Exist");
+			log.info("Customer Already Exist");
+			return null;
 		} else {
 			AuthUser user = new AuthUser(customer.getUserId(), customer.getUsername(), passwordEncoder.encode(password),
 					null, "CUSTOMER");

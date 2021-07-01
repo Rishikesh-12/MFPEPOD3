@@ -47,32 +47,13 @@ public class AccountController {
 		log.info("Account Details Returned Sucessfully");
 		return new ResponseEntity<>(account, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/getAccounts/{customerId}")
 	public ResponseEntity<List<Account>> getCustomerAccount(@RequestHeader("Authorization") String auth,
 			@PathVariable String customerId) {
 		log.info("Inside Get Account Method");
 		accountServiceImpl.hasPermission(auth);
 		return new ResponseEntity<>(accountServiceImpl.getCustomerAccount(auth, customerId), HttpStatus.OK);
-	}
-	
-	@GetMapping("/checkBalance/{accountNumber}")
-	public ResponseEntity<?> checkAccountBalance(@RequestHeader("Authorization") String auth,
-			@PathVariable long accountNumber) {
-		log.info("Inside Check Account Balance Method");
-		accountServiceImpl.hasPermission(auth);
-		double Balance = accountServiceImpl.getAccount(accountNumber).getBalance();
-		log.info("Balance Retrieved successfully");
-		return new ResponseEntity<>(Balance, HttpStatus.OK);
-	}
-
-	@GetMapping("/find")
-	public ResponseEntity<List<Account>> getAllAccount(@RequestHeader("Authorization") String auth) {
-		log.info("Inside Find Account Method");
-		accountServiceImpl.hasPermission(auth);
-		List<Account> account = accountServiceImpl.getAllAccounts();
-		log.info("Returned All Accounts");
-		return new ResponseEntity<>(account, HttpStatus.OK);
 	}
 
 	@PostMapping("/createAccount/{customerId}")
@@ -84,11 +65,11 @@ public class AccountController {
 		if (accountCreationStatus == null)
 			return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
 		log.info("Account Created Sucessfully");
-		
-		transactionFeign.makeDeposit(auth, new AccountInput(account.getAccountNumber(),account.getBalance()));
+
+		transactionFeign.makeDeposit(auth, new AccountInput(account.getAccountNumber(), account.getBalance()));
 		return new ResponseEntity<>(true, HttpStatus.CREATED);
 	}
-	
+
 	@PostMapping("/deposit")
 	public ResponseEntity<?> deposit(@RequestHeader("Authorization") String auth,
 			@RequestBody AccountInput accountInput) {
@@ -107,7 +88,7 @@ public class AccountController {
 			@RequestBody AccountInput accountInput) {
 		log.info("Inside Withdraw Method");
 		accountServiceImpl.hasPermission(auth);
-		boolean status=true;
+		boolean status = true;
 		try {
 			transactionFeign.makeWithdraw(auth, accountInput);
 
@@ -121,25 +102,6 @@ public class AccountController {
 		updatedBalance.setTransactions(transactions);
 		log.info("Amount withdraw sucessful");
 		return new ResponseEntity<>(status, HttpStatus.OK);
-	}
-
-	@PostMapping("/servicecharge")
-	public ResponseEntity<Account> servicecharge(@RequestHeader("Authorization") String auth,
-			@RequestBody AccountInput accountInput) {
-		log.info("Inside Service Charge Method");
-		accountServiceImpl.hasPermission(auth);
-		try {
-			transactionFeign.makeServiceCharges(auth, accountInput);
-
-		} catch (Exception e) {
-			throw new MinimumBalanceException("Minimum Balance 2000 should be maintaind");
-		}
-		Account updatedBalance = accountServiceImpl.updateBalance(accountInput);
-		List<Transaction> transaction = transactionFeign.getTransactionsByAccountNumber(auth,
-				accountInput.getAccountNumber());
-		updatedBalance.setTransactions(transaction);
-		log.info("Service Charges Deducted Successfully");
-		return new ResponseEntity<>(updatedBalance, HttpStatus.OK);
 	}
 
 	@PostMapping("/transfer")
@@ -169,7 +131,7 @@ public class AccountController {
 		log.info("Transfer Completed Successfully");
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
-	
+
 	@PutMapping("/updateAccount")
 	public ResponseEntity<Account> updateAccount(@RequestHeader("Authorization") String auth,
 			@RequestBody Account account) {

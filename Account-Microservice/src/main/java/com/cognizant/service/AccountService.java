@@ -9,7 +9,6 @@ import com.cognizant.model.AuthenticationResponse;
 
 public interface AccountService {
 
-	public List<Account> getAllAccounts();
 
 	public List<Account> getCustomerAccount(String auth, String customerId);
 

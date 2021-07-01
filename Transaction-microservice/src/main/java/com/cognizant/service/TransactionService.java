@@ -11,5 +11,4 @@ public interface TransactionService {
 
 	public boolean makeDeposit(String token, AccountInput accountInput);
 	
-	public boolean makeServiceCharges(String token, AccountInput accountInput);
 }

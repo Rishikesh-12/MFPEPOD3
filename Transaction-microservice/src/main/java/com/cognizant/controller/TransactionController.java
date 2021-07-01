@@ -64,14 +64,6 @@ public class TransactionController {
 		return true;
 	}
 
-	@PostMapping(value = "/servicecharge")
-	public boolean makeServiceCharges(@RequestHeader("Authorization") String token,
-			@Valid @RequestBody AccountInput accountInput) {
-		log.info("Deducting Service Charge");
-		transactionService.makeServiceCharges(token, accountInput);
-		return true;
-	}
-
 	@PostMapping(value = "/deposit")
 	public ResponseEntity<?> makeDeposit(@RequestHeader("Authorization") String token,
 			@Valid @RequestBody AccountInput accountInput) {

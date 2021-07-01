@@ -40,8 +40,5 @@ public interface TransactionFeign {
 	public List<Transaction> getTransactionsByAccountNumber(@RequestHeader("Authorization") String auth,
 			@PathVariable("accountNumber") long accountNumber);
 
-	@PostMapping(value = "/servicecharge")
-	public boolean makeServiceCharges(@RequestHeader("Authorization") String auth,
-			@Valid @RequestBody AccountInput accountInput);
 
 }

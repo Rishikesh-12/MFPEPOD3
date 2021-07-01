@@ -94,16 +94,6 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public List<Account> getAllAccounts() {
-		try {
-			return accountRepository.findAll();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	@Override
 	public AuthenticationResponse hasPermission(String token) {
 		return authFeignClient.getValidity("Bearer " + token);
 	}

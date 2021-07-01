@@ -77,7 +77,6 @@ public class TransactionServiceImpl implements TransactionService {
 		Boolean check = (Boolean) ruleFeign.evaluate(
 				new RulesInput(accountInput.getAccountNumber(), sourceAccount.getBalance(), accountInput.getAmount()))
 				.getBody();
-		// String bodyToString = body.toString();
 		if (check.booleanValue() == false)
 			throw new MinimumBalanceException("Minimum Balance 2000 should be maintaind");
 
@@ -96,29 +95,6 @@ public class TransactionServiceImpl implements TransactionService {
 		return false;
 	}
 
-	@Override
-	public boolean makeServiceCharges(String auth, AccountInput accountInput) {
-		log.info("method to make a service charges");
-		Account sourceAccount = null;
-		log.info("Deducting Service Charge");
-		long accountNumber = accountInput.getAccountNumber();
-		sourceAccount = accountFeign.getAccount(auth, accountNumber);
-		if (sourceAccount != null) {
-			Transaction transaction = new Transaction();
-			transaction.setSourceAccountNumber(sourceAccount.getAccountNumber());
-			transaction.setSourceOwnerName(sourceAccount.getUsername());
-			transaction.setTargetAccountNumber(sourceAccount.getAccountNumber());
-			transaction.setTargetOwnerName(sourceAccount.getUsername());
-			transaction.setDate(LocalDateTime.now());
-			transaction.setReference("Service Charge");
-			transaction.setAmount(accountInput.getAmount());
-			transactionRepository.save(transaction);
-			return true;
-		}
-
-		return false;
-
-	}
 
 	@Override
 	public boolean makeDeposit(String auth, AccountInput accountInput) {
