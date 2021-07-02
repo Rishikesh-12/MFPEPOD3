@@ -71,6 +71,9 @@ body{
     margin-bottom: 40px;
     color: #0d3c61;
   }
+  modal-body{
+    font-weight: bolder;
+  }
   
   .form .label{
     display: block;
@@ -118,7 +121,6 @@ body{
     font-size: 20px;
     color: #555555;
   }
-  
   .btn{
     margin-top: 40px;
     background: #2196F3;
@@ -131,11 +133,10 @@ body{
     font-weight: bolder;
     
   }
+   
   .btn:hover{
       background-color:navy;
   }
-  
-  
   .payment-logo{
     position: absolute;
     top: -50px;
