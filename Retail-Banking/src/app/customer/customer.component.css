@@ -74,5 +74,13 @@ th {
      }
 .personal-detail{
     text-align: center;
-    margin-top: 24px;
+    margin-top: 8px;
+}
+.getDetails{
+  background-color: rgb(103, 103, 129);
+  font-weight: bolder;
+  color: aliceblue;
+}
+.getDetails:hover{
+  background-color: mediumslateblue;
 }
