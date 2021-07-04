@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "transaction")
@@ -31,7 +32,7 @@ public class Transaction {
 
 	private double amount;
 
-	private LocalDateTime date;
+	private Date date;
 
 	private String reference;
 

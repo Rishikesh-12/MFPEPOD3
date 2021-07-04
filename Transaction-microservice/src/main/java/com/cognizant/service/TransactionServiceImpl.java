@@ -1,6 +1,7 @@
 package com.cognizant.service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import com.cognizant.feign.AccountFeign;
 import com.cognizant.feign.RulesFeign;
 import com.cognizant.models.Account;
 import com.cognizant.models.RulesInput;
+import com.cognizant.models.TransactionStatus;
 import com.cognizant.entities.Transaction;
 import com.cognizant.repository.TransactionRepository;
 import com.cognizant.util.AccountInput;
@@ -54,7 +56,7 @@ public class TransactionServiceImpl implements TransactionService {
 				sourcetransaction.setSourceOwnerName(sourceAccount.getUsername());
 				sourcetransaction.setTargetAccountNumber(targetAccount.getAccountNumber());
 				sourcetransaction.setTargetOwnerName(targetAccount.getUsername());
-				sourcetransaction.setDate(LocalDateTime.now());
+				sourcetransaction.setDate(new Date());
 				sourcetransaction.setReference("Transfer");
 				transactionRepository.save(sourcetransaction);
 				return true;
@@ -64,11 +66,11 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private boolean isAmountAvailable(double amount, double balance) {
-		return (balance - amount) > 0;
+		return (balance-amount) > 0;
 	}
 
 	@Override
-	public boolean makeWithdraw(String auth, AccountInput accountInput) {
+	public TransactionStatus makeWithdraw(String auth, AccountInput accountInput) {
 		Account sourceAccount = null;
 
 		long accountNumber = accountInput.getAccountNumber();
@@ -79,20 +81,20 @@ public class TransactionServiceImpl implements TransactionService {
 				.getBody();
 		if (check.booleanValue() == false)
 			throw new MinimumBalanceException("Minimum Balance 2000 should be maintaind");
-
+		TransactionStatus status=accountFeign.withdraw(auth, accountInput);
 		if (sourceAccount != null) {
 			Transaction transaction = new Transaction();
 			transaction.setSourceAccountNumber(sourceAccount.getAccountNumber());
 			transaction.setSourceOwnerName(sourceAccount.getUsername());
 			transaction.setTargetAccountNumber(sourceAccount.getAccountNumber());
 			transaction.setTargetOwnerName(sourceAccount.getUsername());
-			transaction.setDate(LocalDateTime.now());
+			transaction.setDate(new Date());
 			transaction.setReference("Withdrawn");
 			transaction.setAmount(accountInput.getAmount());
 			transactionRepository.save(transaction);
-			return true;
+			return status;
 		}
-		return false;
+		return null;
 	}
 
 
@@ -108,7 +110,7 @@ public class TransactionServiceImpl implements TransactionService {
 			transaction.setSourceOwnerName(sourceAccount.getUsername());
 			transaction.setTargetAccountNumber(sourceAccount.getAccountNumber());
 			transaction.setTargetOwnerName(sourceAccount.getUsername());
-			transaction.setDate(LocalDateTime.now());
+			transaction.setDate(new Date());
 			transaction.setReference("Deposit");
 			transaction.setAmount(accountInput.getAmount());
 			transactionRepository.save(transaction);

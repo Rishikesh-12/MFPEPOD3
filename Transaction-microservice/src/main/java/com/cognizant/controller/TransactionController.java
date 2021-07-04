@@ -3,6 +3,7 @@ package com.cognizant.controller;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.ws.rs.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cognizant.entities.Transaction;
+import com.cognizant.models.TransactionStatus;
 import com.cognizant.repository.TransactionRepository;
 import com.cognizant.service.TransactionServiceImpl;
 import com.cognizant.util.AccountInput;
@@ -57,11 +59,11 @@ public class TransactionController {
 	}
 
 	@PostMapping(value = "/withdraw")
-	public boolean makeWithdraw(@RequestHeader("Authorization") String token,
+	public ResponseEntity<TransactionStatus> makeWithdraw(@RequestHeader("Authorization") String token,
 			@Valid @RequestBody AccountInput accountInput) {
 		log.info("Withdraw Initiated");
-		transactionService.makeWithdraw(token, accountInput);
-		return true;
+		TransactionStatus status= transactionService.makeWithdraw(token, accountInput);
+		return new ResponseEntity<TransactionStatus>(status,HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/deposit")
@@ -71,5 +73,10 @@ public class TransactionController {
 		transactionService.makeDeposit(token, accountInput);
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
-
+	
+	@GetMapping("/getTansaction/{accountNumber}/{from_date}/{to_date}")
+	public List<Transaction> getTransaction(@PathVariable("accountNumber") long accNo,@PathVariable("from_date") String from_date,@PathVariable("to_date") String to_date){
+		List<Transaction> transactions = transRepo.getStatement(from_date, to_date, accNo);
+		return transactions;
+	}
 }

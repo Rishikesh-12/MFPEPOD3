@@ -21,8 +21,10 @@ import com.cognizant.exceptions.MinimumBalanceException;
 import com.cognizant.feign.TransactionFeign;
 import com.cognizant.model.AccountCreationStatus;
 import com.cognizant.model.AccountInput;
+import com.cognizant.model.Statement;
 import com.cognizant.model.Transaction;
 import com.cognizant.model.TransactionInput;
+import com.cognizant.model.TransactionStatus;
 import com.cognizant.service.AccountServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -57,51 +59,53 @@ public class AccountController {
 	}
 
 	@PostMapping("/createAccount/{customerId}")
-	public ResponseEntity<?> createAccount(@RequestHeader("Authorization") String auth, @PathVariable String customerId,
+	public ResponseEntity<AccountCreationStatus> createAccount(@RequestHeader("Authorization") String auth, @PathVariable String customerId,
 			@Valid @RequestBody Account account) {
 		log.info("Inside Create Account Method");
 		accountServiceImpl.hasAdminPermission(auth);
 		AccountCreationStatus accountCreationStatus = accountServiceImpl.createAccount(auth, customerId, account);
 		if (accountCreationStatus == null)
-			return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
 		log.info("Account Created Sucessfully");
 
 		transactionFeign.makeDeposit(auth, new AccountInput(account.getAccountNumber(), account.getBalance()));
-		return new ResponseEntity<>(true, HttpStatus.CREATED);
+		return new ResponseEntity<>(accountCreationStatus, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/deposit")
-	public ResponseEntity<?> deposit(@RequestHeader("Authorization") String auth,
+	public ResponseEntity<TransactionStatus> deposit(@RequestHeader("Authorization") String auth,
 			@RequestBody AccountInput accountInput) {
 		log.info("Inside Deposit Method");
 		accountServiceImpl.hasPermission(auth);
 		transactionFeign.makeDeposit(auth, accountInput);
 		Account updateBalance = accountServiceImpl.updateDepositBalance(accountInput);
+		TransactionStatus status=new TransactionStatus("Deposit was successfull", updateBalance.getBalance());
 		List<Transaction> list = transactionFeign.getTransactionsByAccountNumber(auth, accountInput.getAccountNumber());
 		updateBalance.setTransactions(list);
 		log.info("Amount Deposited Successfully");
-		return new ResponseEntity<>(true, HttpStatus.OK);
+		return new ResponseEntity<>(status, HttpStatus.OK);
 	}
 
 	@PostMapping("/withdraw")
-	public ResponseEntity<?> withdraw(@RequestHeader("Authorization") String auth,
+	public TransactionStatus withdraw(@RequestHeader("Authorization") String auth,
 			@RequestBody AccountInput accountInput) {
 		log.info("Inside Withdraw Method");
 		accountServiceImpl.hasPermission(auth);
-		boolean status = true;
+		/*boolean status = true;
 		try {
 			transactionFeign.makeWithdraw(auth, accountInput);
 
 		} catch (Exception e) {
 			status = false;
 			return new ResponseEntity<>(status, HttpStatus.NOT_ACCEPTABLE);
-		}
+		}*/
 		Account updatedBalance = accountServiceImpl.updateBalance(accountInput);
+		TransactionStatus status=new TransactionStatus("Withdraw was successfull", updatedBalance.getBalance());
 		List<Transaction> transactions = transactionFeign.getTransactionsByAccountNumber(auth,
 				accountInput.getAccountNumber());
 		updatedBalance.setTransactions(transactions);
 		log.info("Amount withdraw sucessful");
-		return new ResponseEntity<>(status, HttpStatus.OK);
+		return status;
 	}
 
 	@PostMapping("/transfer")
@@ -141,5 +145,13 @@ public class AccountController {
 		log.info("Account Details Updated Sucessfully");
 		return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
 	}
-
+	
+	@GetMapping("/getStatement/{accountNumber}/{from_date}/{to_date}")
+	public ResponseEntity<List<Statement>> getSatement(@RequestHeader("Authorization") String auth,@PathVariable("accountNumber") long id,
+			@PathVariable("from_date") String from_date, @PathVariable String to_date){
+		System.out.println(from_date + "  asd   " + to_date);
+		accountServiceImpl.hasAdminPermission(auth);
+		List<Statement> list = accountServiceImpl.getStatement(id, from_date, to_date);
+		return new ResponseEntity<List<Statement>>(list, HttpStatus.OK);
+	}
 }

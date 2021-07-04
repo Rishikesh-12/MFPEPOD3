@@ -39,6 +39,7 @@ public interface TransactionFeign {
 	@GetMapping(value = "/getTransactionsByAccountNumber/{accountNumber}")
 	public List<Transaction> getTransactionsByAccountNumber(@RequestHeader("Authorization") String auth,
 			@PathVariable("accountNumber") long accountNumber);
-
-
+	
+	@GetMapping("/getTansaction/{accountNumber}/{from_date}/{to_date}")
+	public List<Transaction> getTransaction(@PathVariable("accountNumber") long accNo,@PathVariable("from_date") String from_date,@PathVariable("to_date") String to_date);
 }

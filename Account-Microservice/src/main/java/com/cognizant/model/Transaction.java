@@ -1,6 +1,7 @@
 package com.cognizant.model;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class Transaction {
 	private long targetAccountNumber;
 	private String targetOwnerName;
 	private double amount;
-	private LocalDateTime date;
+	private Date date;
 	private String reference;
 
 }
