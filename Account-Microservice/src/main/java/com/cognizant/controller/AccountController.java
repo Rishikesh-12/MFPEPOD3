@@ -1,5 +1,6 @@
 package com.cognizant.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,14 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cognizant.entities.Account;
-import com.cognizant.exceptions.MinimumBalanceException;
 import com.cognizant.feign.TransactionFeign;
 import com.cognizant.model.AccountCreationStatus;
 import com.cognizant.model.AccountInput;
 import com.cognizant.model.Statement;
+import com.cognizant.model.StatementRequest;
 import com.cognizant.model.Transaction;
 import com.cognizant.model.TransactionInput;
 import com.cognizant.model.TransactionStatus;
+import com.cognizant.repository.StatementRepository;
 import com.cognizant.service.AccountServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,9 @@ public class AccountController {
 
 	@Autowired
 	private TransactionFeign transactionFeign;
+	
+	@Autowired
+	private StatementRepository statementRepository;
 
 	@GetMapping("/getAccount/{accountNumber}")
 	public ResponseEntity<Account> getAccount(@RequestHeader("Authorization") String auth,
@@ -65,10 +70,10 @@ public class AccountController {
 		accountServiceImpl.hasAdminPermission(auth);
 		AccountCreationStatus accountCreationStatus = accountServiceImpl.createAccount(auth, customerId, account);
 		if (accountCreationStatus == null)
-			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+			return new ResponseEntity<>(accountCreationStatus, HttpStatus.NOT_ACCEPTABLE);
 		log.info("Account Created Sucessfully");
-
 		transactionFeign.makeDeposit(auth, new AccountInput(account.getAccountNumber(), account.getBalance()));
+		accountServiceImpl.statement(account);
 		return new ResponseEntity<>(accountCreationStatus, HttpStatus.CREATED);
 	}
 
@@ -83,29 +88,29 @@ public class AccountController {
 		List<Transaction> list = transactionFeign.getTransactionsByAccountNumber(auth, accountInput.getAccountNumber());
 		updateBalance.setTransactions(list);
 		log.info("Amount Deposited Successfully");
+		accountServiceImpl.statement(accountInput, "deposit");
 		return new ResponseEntity<>(status, HttpStatus.OK);
 	}
 
 	@PostMapping("/withdraw")
-	public TransactionStatus withdraw(@RequestHeader("Authorization") String auth,
+	public ResponseEntity<TransactionStatus> withdraw(@RequestHeader("Authorization") String auth,
 			@RequestBody AccountInput accountInput) {
 		log.info("Inside Withdraw Method");
 		accountServiceImpl.hasPermission(auth);
-		/*boolean status = true;
 		try {
 			transactionFeign.makeWithdraw(auth, accountInput);
 
 		} catch (Exception e) {
-			status = false;
-			return new ResponseEntity<>(status, HttpStatus.NOT_ACCEPTABLE);
-		}*/
+			return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
+		}
 		Account updatedBalance = accountServiceImpl.updateBalance(accountInput);
-		TransactionStatus status=new TransactionStatus("Withdraw was successfull", updatedBalance.getBalance());
 		List<Transaction> transactions = transactionFeign.getTransactionsByAccountNumber(auth,
 				accountInput.getAccountNumber());
 		updatedBalance.setTransactions(transactions);
 		log.info("Amount withdraw sucessful");
-		return status;
+		accountServiceImpl.statement(accountInput, "withdraw");
+		TransactionStatus transactionStatus = new TransactionStatus("Withdraw was successfull", updatedBalance.getBalance());
+		return new ResponseEntity<>(transactionStatus, HttpStatus.OK);
 	}
 
 	@PostMapping("/transfer")
@@ -115,10 +120,11 @@ public class AccountController {
 		accountServiceImpl.hasPermission(auth);
 		boolean status = true;
 		try {
-			status = transactionFeign.makeTransfer(auth, transactionInput);
+			transactionFeign.makeTransfer(auth, transactionInput);
 
 		} catch (Exception e) {
-			return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
+			status = false;
+			log.info("Transfer service declined");
 		}
 		if (status == false) {
 			return new ResponseEntity<>(false, HttpStatus.NOT_IMPLEMENTED);
@@ -133,6 +139,7 @@ public class AccountController {
 				transactionInput.getTargetAccount().getAccountNumber());
 		updatedTargetBalance.setTransactions(targetlist);
 		log.info("Transfer Completed Successfully");
+		accountServiceImpl.statement(transactionInput, "transfer");
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 
@@ -145,13 +152,14 @@ public class AccountController {
 		log.info("Account Details Updated Sucessfully");
 		return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
 	}
-	
-	@GetMapping("/getStatement/{accountNumber}/{from_date}/{to_date}")
-	public ResponseEntity<List<Statement>> getSatement(@RequestHeader("Authorization") String auth,@PathVariable("accountNumber") long id,
-			@PathVariable("from_date") String from_date, @PathVariable String to_date){
-		System.out.println(from_date + "  asd   " + to_date);
-		accountServiceImpl.hasAdminPermission(auth);
-		List<Statement> list = accountServiceImpl.getStatement(id, from_date, to_date);
-		return new ResponseEntity<List<Statement>>(list, HttpStatus.OK);
+
+	@PostMapping("/getStatement")
+	public ResponseEntity<List<Statement>> getStatement(@RequestHeader("Authorization") String auth,
+			@RequestBody StatementRequest statementRequest) {
+		long timeadj = 24*60*60*1000;
+		statementRequest.setToDate(new Date(statementRequest.getToDate().getTime()+timeadj));
+		List<Statement> list = statementRepository.findStatement(statementRequest.getAccountNo(), statementRequest.getFromDate(), statementRequest.getToDate());
+		return new ResponseEntity<>(list , HttpStatus.OK);
 	}
+
 }

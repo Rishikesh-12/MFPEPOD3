@@ -23,7 +23,7 @@ public class AccountserviceApplication {
 		log.info("Starting Account Microservice");
 		SpringApplication.run(AccountserviceApplication.class, args);
 	}
-	
+
 	@Bean
 	public CorsFilter corsFilter() {
 		CorsConfiguration corsConfiguration = new CorsConfiguration();
@@ -39,4 +39,5 @@ public class AccountserviceApplication {
 		urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
 		return new CorsFilter(urlBasedCorsConfigurationSource);
 	}
+	
 }

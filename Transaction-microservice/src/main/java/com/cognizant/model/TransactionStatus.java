@@ -1,4 +1,4 @@
-package com.cognizant.models;
+package com.cognizant.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionStatus {
-	private String messgae;
-	private double balance;
+	private String status;
+	private double amount;
 }

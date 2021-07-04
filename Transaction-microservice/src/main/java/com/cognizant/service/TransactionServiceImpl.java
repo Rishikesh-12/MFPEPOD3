@@ -11,7 +11,6 @@ import com.cognizant.feign.AccountFeign;
 import com.cognizant.feign.RulesFeign;
 import com.cognizant.models.Account;
 import com.cognizant.models.RulesInput;
-import com.cognizant.models.TransactionStatus;
 import com.cognizant.entities.Transaction;
 import com.cognizant.repository.TransactionRepository;
 import com.cognizant.util.AccountInput;
@@ -66,11 +65,11 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	private boolean isAmountAvailable(double amount, double balance) {
-		return (balance-amount) > 0;
+		return (balance - amount) > 0;
 	}
 
 	@Override
-	public TransactionStatus makeWithdraw(String auth, AccountInput accountInput) {
+	public boolean makeWithdraw(String auth, AccountInput accountInput) {
 		Account sourceAccount = null;
 
 		long accountNumber = accountInput.getAccountNumber();
@@ -81,7 +80,7 @@ public class TransactionServiceImpl implements TransactionService {
 				.getBody();
 		if (check.booleanValue() == false)
 			throw new MinimumBalanceException("Minimum Balance 2000 should be maintaind");
-		TransactionStatus status=accountFeign.withdraw(auth, accountInput);
+
 		if (sourceAccount != null) {
 			Transaction transaction = new Transaction();
 			transaction.setSourceAccountNumber(sourceAccount.getAccountNumber());
@@ -92,9 +91,9 @@ public class TransactionServiceImpl implements TransactionService {
 			transaction.setReference("Withdrawn");
 			transaction.setAmount(accountInput.getAmount());
 			transactionRepository.save(transaction);
-			return status;
+			return true;
 		}
-		return null;
+		return false;
 	}
 
 

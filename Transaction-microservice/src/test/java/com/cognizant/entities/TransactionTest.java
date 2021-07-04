@@ -53,9 +53,9 @@ class TransactionTest {
 		assertEquals("Savings", transaction.getReference());
 	}
 
-	//@Test
-	/*void dateTest() {
-		transaction.setDate(LocalDateTime.of(2021, 6, 19, 12, 55));
-		assertNotEquals(LocalDateTime.of(2021, 4, 20, 1, 40), transaction.getDate());
-	}*/
+//	@Test
+//	void dateTest() {
+//		transaction.setDate(LocalDateTime.of(2021, 6, 19, 12, 55));
+//		assertNotEquals(LocalDateTime.of(2021, 4, 20, 1, 40), transaction.getDate());
+//	}
 }

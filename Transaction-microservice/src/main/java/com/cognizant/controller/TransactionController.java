@@ -3,7 +3,6 @@ package com.cognizant.controller;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.ws.rs.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cognizant.entities.Transaction;
-import com.cognizant.models.TransactionStatus;
+import com.cognizant.model.TransactionStatus;
 import com.cognizant.repository.TransactionRepository;
 import com.cognizant.service.TransactionServiceImpl;
 import com.cognizant.util.AccountInput;
@@ -37,46 +36,49 @@ public class TransactionController {
 	public TransactionServiceImpl transactionService;
 
 	@PostMapping(value = "/transfer")
-	public boolean makeTransfer(@RequestHeader("Authorization") String token,
+	public TransactionStatus makeTransfer(@RequestHeader("Authorization") String token,
 			@Valid @RequestBody TransactionInput transactionInput) {
-		log.info("Initiating Transfer");
-		if (transactionInput != null) {
-			boolean isComplete = transactionService.makeTransfer(token, transactionInput);
-
-			return isComplete;
+		log.info("Initiating Transfer of ₹."+transactionInput.getAmount()+" from account no " + transactionInput.getSourceAccount().getAccountNumber()
+				+ "to account no "+transactionInput.getTargetAccount().getAccountNumber());
+		
+		boolean status = transactionService.makeTransfer(token, transactionInput);
+		
+		if (status) {
+			log.info("Transfer completed");
+			return new TransactionStatus("Transfer Successfull",transactionInput.getAmount());
 		} else {
-			return false;
+			log.info("Transfer not completed");
 		}
+		return new TransactionStatus("Transfer Not Successfull",transactionInput.getAmount());
 	}
 
 	@GetMapping(value = "/getTransactionsByAccountNumber/{accountNumber}")
 	public List<Transaction> getTransactionsByAccountNumber(@RequestHeader("Authorization") String token,
 			@PathVariable("accountNumber") long accountNumber) {
-		log.info("Getting Transactions by Account Number");
-		List<Transaction> transactions = transRepo
+		log.info("Getting Transaction History for Account Number " + accountNumber);
+		List<Transaction> transactionHistory = transRepo
 				.findBySourceAccountNumberOrTargetAccountNumberOrderByDate(accountNumber, accountNumber);
-		return transactions;
+		return transactionHistory;
 	}
 
 	@PostMapping(value = "/withdraw")
-	public ResponseEntity<TransactionStatus> makeWithdraw(@RequestHeader("Authorization") String token,
+	public TransactionStatus makeWithdraw(@RequestHeader("Authorization") String token,
 			@Valid @RequestBody AccountInput accountInput) {
-		log.info("Withdraw Initiated");
-		TransactionStatus status= transactionService.makeWithdraw(token, accountInput);
-		return new ResponseEntity<TransactionStatus>(status,HttpStatus.OK);
+		log.info("Withdraw service initiated for account number" + accountInput.getAccountNumber());
+		boolean status = transactionService.makeWithdraw(token, accountInput);
+		log.info("Withdraw Successfull");
+		if (status) return new TransactionStatus("Withdraw Successfull",accountInput.getAmount());
+		return new TransactionStatus("Transfer Unsuccessfull",accountInput.getAmount());
 	}
 
 	@PostMapping(value = "/deposit")
-	public ResponseEntity<?> makeDeposit(@RequestHeader("Authorization") String token,
+	public TransactionStatus makeDeposit(@RequestHeader("Authorization") String token,
 			@Valid @RequestBody AccountInput accountInput) {
-		log.info("Deposit Initiated");
-		transactionService.makeDeposit(token, accountInput);
-		return new ResponseEntity<>(true, HttpStatus.OK);
+		log.info("Deposit service initiated for account number " + accountInput.getAccountNumber());
+		boolean status = transactionService.makeDeposit(token, accountInput);
+		log.info("Deposit Successfull");
+		if (status) return new TransactionStatus("Deposit Successfull",accountInput.getAmount());
+		return new TransactionStatus("Deposit Unsuccessfull",accountInput.getAmount());
 	}
-	
-	@GetMapping("/getTansaction/{accountNumber}/{from_date}/{to_date}")
-	public List<Transaction> getTransaction(@PathVariable("accountNumber") long accNo,@PathVariable("from_date") String from_date,@PathVariable("to_date") String to_date){
-		List<Transaction> transactions = transRepo.getStatement(from_date, to_date, accNo);
-		return transactions;
-	}
+
 }

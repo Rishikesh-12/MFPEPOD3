@@ -1,6 +1,6 @@
 package com.cognizant.model;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Table;
 
@@ -28,7 +28,7 @@ public class Transaction {
 
 	private double amount;
 
-	private LocalDateTime date;
+	private Date date;
 
 	private String reference;
 

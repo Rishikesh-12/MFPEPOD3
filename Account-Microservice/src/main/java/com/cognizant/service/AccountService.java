@@ -6,7 +6,6 @@ import com.cognizant.entities.Account;
 import com.cognizant.model.AccountCreationStatus;
 import com.cognizant.model.AccountInput;
 import com.cognizant.model.AuthenticationResponse;
-import com.cognizant.model.Statement;
 
 public interface AccountService {
 
@@ -28,7 +27,5 @@ public interface AccountService {
 	public AuthenticationResponse hasAdminPermission(String auth);
 
 	public AuthenticationResponse hasCustomerPermission(String auth);
-	
-	public List<Statement> getStatement(long id, String from_date,String to_date);
 
 }

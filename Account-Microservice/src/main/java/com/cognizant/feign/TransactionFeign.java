@@ -17,29 +17,29 @@ import com.cognizant.entities.Account;
 import com.cognizant.model.AccountInput;
 import com.cognizant.model.Transaction;
 import com.cognizant.model.TransactionInput;
+import com.cognizant.model.TransactionStatus;
 
 @FeignClient(name = "transaction-ms", url = "${feign.url-transaction-ms}")
 public interface TransactionFeign {
 
 	@PostMapping("/deposit")
-	public ResponseEntity<?> makeDeposit(@RequestHeader("Authorization") String auth,
+	public TransactionStatus makeDeposit(@RequestHeader("Authorization") String auth,
 			@Valid @RequestBody AccountInput accountInput);
 
 	@PostMapping("/withdraw")
-	public boolean makeWithdraw(@RequestHeader("Authorization") String auth,
+	public TransactionStatus makeWithdraw(@RequestHeader("Authorization") String auth,
 			@Valid @RequestBody AccountInput accountInput);
 
 	@PostMapping(value = "/accounts", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Account checkAccountBalance(@Valid @RequestBody AccountInput accountInput);
 
 	@PostMapping(value = "/transfer")
-	public boolean makeTransfer(@RequestHeader("Authorization") String auth,
+	public TransactionStatus makeTransfer(@RequestHeader("Authorization") String auth,
 			@Valid @RequestBody TransactionInput transactionInput);
 
 	@GetMapping(value = "/getTransactionsByAccountNumber/{accountNumber}")
 	public List<Transaction> getTransactionsByAccountNumber(@RequestHeader("Authorization") String auth,
 			@PathVariable("accountNumber") long accountNumber);
-	
-	@GetMapping("/getTansaction/{accountNumber}/{from_date}/{to_date}")
-	public List<Transaction> getTransaction(@PathVariable("accountNumber") long accNo,@PathVariable("from_date") String from_date,@PathVariable("to_date") String to_date);
+
+
 }
