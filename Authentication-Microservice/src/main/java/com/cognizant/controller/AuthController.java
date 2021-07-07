@@ -41,13 +41,8 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<AuthUsers> login(@RequestBody AuthUsers authUser)
 			throws UsernameNotFoundException, AppUserNotFoundException {
-		AuthUsers a = userRepository.findByUserId("ADMIN");
-		if (a==null)
-			userRepository.save(new AuthUsers("ADMIN", "ADMIN",
-					"$2a$10$BKxCZweN5SKmTWoFffiGieBdqXszcRiNX5nDV.p1iA7A1FcGJpnVu", null, "ADMIN"));
-
 		AuthUsers user = loginService.userLogin(authUser);
-		log.info("Credentials :{}", user.getAuthToken());
+		log.info("Credentials :{}", user);
 		return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
 	}
 

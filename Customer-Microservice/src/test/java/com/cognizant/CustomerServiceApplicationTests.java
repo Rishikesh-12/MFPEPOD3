@@ -10,8 +10,8 @@ class CustomerServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
-		String check="Navneet";
-		assertEquals("Navneet",check );
+		String check="Rishikesh";
+		assertEquals("Rishikesh",check );
 	}
 
 }

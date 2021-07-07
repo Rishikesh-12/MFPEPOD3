@@ -72,26 +72,42 @@ public class TransactionServiceImpl implements TransactionService {
 	public boolean makeWithdraw(String auth, AccountInput accountInput) {
 		Account sourceAccount = null;
 
+		
 		long accountNumber = accountInput.getAccountNumber();
 		sourceAccount = accountFeign.getAccount(auth, accountNumber);
-		log.info("Withdrawing Amount");
-		Boolean check = (Boolean) ruleFeign.evaluate(
-				new RulesInput(accountInput.getAccountNumber(), sourceAccount.getBalance(), accountInput.getAmount()))
-				.getBody();
-		if (check.booleanValue() == false)
-			throw new MinimumBalanceException("Minimum Balance 2000 should be maintaind");
-
-		if (sourceAccount != null) {
+		
+		if(accountInput.getAmount() == sourceAccount.getBalance()*0.05) {
 			Transaction transaction = new Transaction();
 			transaction.setSourceAccountNumber(sourceAccount.getAccountNumber());
 			transaction.setSourceOwnerName(sourceAccount.getUsername());
 			transaction.setTargetAccountNumber(sourceAccount.getAccountNumber());
 			transaction.setTargetOwnerName(sourceAccount.getUsername());
 			transaction.setDate(new Date());
-			transaction.setReference("Withdrawn");
+			transaction.setReference("Service Charge");
 			transaction.setAmount(accountInput.getAmount());
 			transactionRepository.save(transaction);
 			return true;
+		}
+		else {
+			log.info("Withdrawing Amount");
+			Boolean check = (Boolean) ruleFeign.evaluate(
+					new RulesInput(accountInput.getAccountNumber(), sourceAccount.getBalance(), accountInput.getAmount()))
+					.getBody();
+			if (check.booleanValue() == false)
+				throw new MinimumBalanceException("Minimum Balance 2000 should be maintaind");
+	
+			if (sourceAccount != null) {
+				Transaction transaction = new Transaction();
+				transaction.setSourceAccountNumber(sourceAccount.getAccountNumber());
+				transaction.setSourceOwnerName(sourceAccount.getUsername());
+				transaction.setTargetAccountNumber(sourceAccount.getAccountNumber());
+				transaction.setTargetOwnerName(sourceAccount.getUsername());
+				transaction.setDate(new Date());
+				transaction.setReference("Withdrawn");
+				transaction.setAmount(accountInput.getAmount());
+				transactionRepository.save(transaction);
+				return true;
+			}
 		}
 		return false;
 	}

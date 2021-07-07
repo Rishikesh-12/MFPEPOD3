@@ -37,6 +37,16 @@ public class AccountServiceImpl implements AccountService {
 	private TransactionFeign transactionFeign;
 	
 	@Override
+	public List<Account> getAllAccounts() {
+		try {
+			return accountRepository.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@Override
 	public AccountCreationStatus createAccount(String auth, String customerId, Account account) {
 		Account newAccount = accountRepository.findByAccountNumber(account.getAccountNumber());
 		if (newAccount != null) {

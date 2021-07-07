@@ -58,19 +58,19 @@ class AccountControllerTest {
 	@Test
 	void getCustomerAccountTest() throws Exception {
 		when(accountServiceImpl.hasPermission("auth")).thenReturn(new AuthenticationResponse("", "", true));
-		when(accountServiceImpl.getCustomerAccount("auth", "Temp")).thenReturn(new ArrayList<>());
-		mockMvc.perform(get("/getAccounts/Temp").header("Authorization", "auth")).andExpect(status().isOk());
-		verify(accountServiceImpl, timeout(1)).getCustomerAccount("auth", "Temp");
+		when(accountServiceImpl.getCustomerAccount("auth", "Aryan")).thenReturn(new ArrayList<>());
+		mockMvc.perform(get("/getAccounts/Aryan").header("Authorization", "auth")).andExpect(status().isOk());
+		verify(accountServiceImpl, timeout(1)).getCustomerAccount("auth", "Aryan");
 	}
 
 	@Test
 	void createAccountTest() throws Exception {
 		when(accountServiceImpl.hasAdminPermission("auth"))
 				.thenReturn(new AuthenticationResponse("Emp101", "emp", true));
-		Account account = new Account(1l, "Temp", 5000.0, "Savings", "Samuel F", null);
-		when(accountServiceImpl.createAccount("Temp", null, account))
+		Account account = new Account(1l, "Aryan", 5000.0, "Savings", "Samuel F", null);
+		when(accountServiceImpl.createAccount("Aryan", null, account))
 				.thenReturn(new AccountCreationStatus(1, "Sucessfully Created"));
-		mockMvc.perform(MockMvcRequestBuilders.post("/createAccount/Temp").content(asJsonString(account))
+		mockMvc.perform(MockMvcRequestBuilders.post("/createAccount/Aryan").content(asJsonString(account))
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", "auth")).andExpect(status().isNotAcceptable());
 		verify(accountServiceImpl, timeout(1)).hasAdminPermission("auth");

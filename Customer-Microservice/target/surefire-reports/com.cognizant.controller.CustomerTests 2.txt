@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.cognizant.controller.CustomerTests
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 21.842 s - in com.cognizant.controller.CustomerTests

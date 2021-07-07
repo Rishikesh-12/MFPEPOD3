@@ -41,7 +41,7 @@ public class AccountController {
 
 	@Autowired
 	private TransactionFeign transactionFeign;
-	
+
 	@Autowired
 	private StatementRepository statementRepository;
 
@@ -58,14 +58,15 @@ public class AccountController {
 	@GetMapping("/getAccounts/{customerId}")
 	public ResponseEntity<List<Account>> getCustomerAccount(@RequestHeader("Authorization") String auth,
 			@PathVariable String customerId) {
+		token = auth;
 		log.info("Inside Get Account Method");
 		accountServiceImpl.hasPermission(auth);
 		return new ResponseEntity<>(accountServiceImpl.getCustomerAccount(auth, customerId), HttpStatus.OK);
 	}
 
 	@PostMapping("/createAccount/{customerId}")
-	public ResponseEntity<AccountCreationStatus> createAccount(@RequestHeader("Authorization") String auth, @PathVariable String customerId,
-			@Valid @RequestBody Account account) {
+	public ResponseEntity<AccountCreationStatus> createAccount(@RequestHeader("Authorization") String auth,
+			@PathVariable String customerId, @Valid @RequestBody Account account) {
 		log.info("Inside Create Account Method");
 		accountServiceImpl.hasAdminPermission(auth);
 		AccountCreationStatus accountCreationStatus = accountServiceImpl.createAccount(auth, customerId, account);
@@ -84,7 +85,7 @@ public class AccountController {
 		accountServiceImpl.hasPermission(auth);
 		transactionFeign.makeDeposit(auth, accountInput);
 		Account updateBalance = accountServiceImpl.updateDepositBalance(accountInput);
-		TransactionStatus status=new TransactionStatus("Deposit was successfull", updateBalance.getBalance());
+		TransactionStatus status = new TransactionStatus("Deposit was successfull", updateBalance.getBalance());
 		List<Transaction> list = transactionFeign.getTransactionsByAccountNumber(auth, accountInput.getAccountNumber());
 		updateBalance.setTransactions(list);
 		log.info("Amount Deposited Successfully");
@@ -109,7 +110,8 @@ public class AccountController {
 		updatedBalance.setTransactions(transactions);
 		log.info("Amount withdraw sucessful");
 		accountServiceImpl.statement(accountInput, "withdraw");
-		TransactionStatus transactionStatus = new TransactionStatus("Withdraw was successfull", updatedBalance.getBalance());
+		TransactionStatus transactionStatus = new TransactionStatus("Withdraw was successfull",
+				updatedBalance.getBalance());
 		return new ResponseEntity<>(transactionStatus, HttpStatus.OK);
 	}
 
@@ -156,10 +158,38 @@ public class AccountController {
 	@PostMapping("/getStatement")
 	public ResponseEntity<List<Statement>> getStatement(@RequestHeader("Authorization") String auth,
 			@RequestBody StatementRequest statementRequest) {
-		long timeadj = 24*60*60*1000;
-		statementRequest.setToDate(new Date(statementRequest.getToDate().getTime()+timeadj));
-		List<Statement> list = statementRepository.findStatement(statementRequest.getAccountNo(), statementRequest.getFromDate(), statementRequest.getToDate());
-		return new ResponseEntity<>(list , HttpStatus.OK);
+		long timeadj = 24 * 60 * 60 * 1000;
+		statementRequest.setToDate(new Date(statementRequest.getToDate().getTime() + timeadj));
+		List<Statement> list = statementRepository.findStatement(statementRequest.getAccountNo(),
+				statementRequest.getFromDate(), statementRequest.getToDate());
+		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+
+	@GetMapping("/find")
+	public List<Account> getAllAccount() {
+		log.info("Inside Find Account Method");
+		List<Account> account = accountServiceImpl.getAllAccounts();
+		log.info("Returned All Accounts");
+		return account;
+	}
+
+	private String token;
+	@PostMapping("/serviceCharge")
+	public void serviceCharge(@RequestBody AccountInput accountInput) {
+		log.info("Inside service charge Method");
+		accountServiceImpl.hasPermission(token);
+		try {
+			transactionFeign.makeWithdraw(token, accountInput);
+
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		}
+		Account updatedBalance = accountServiceImpl.updateBalance(accountInput);
+		List<Transaction> transactions = transactionFeign.getTransactionsByAccountNumber(token,
+				accountInput.getAccountNumber());
+		updatedBalance.setTransactions(transactions);
+		log.info("service charge deduction sucessful");
+		accountServiceImpl.statement(accountInput, "Service Charge");
 	}
 
 }

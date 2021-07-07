@@ -17,12 +17,10 @@ import com.cognizant.model.AccountInput;
 @FeignClient(name = "account-ms", url = "${feign.url-account-ms}")
 public interface AccountFeign {
 
-	@PostMapping("/servicecharge")
-	public ResponseEntity<Account> servicecharge(@RequestHeader("Authorization") String auth,
-			@RequestBody AccountInput accountInput);
-
 	@GetMapping("/find")
-	public ResponseEntity<List<Account>> getAllAccount(@RequestHeader("Authorization") String auth);
-	
+	public List<Account> getAllAccount();
+
+	@PostMapping("/serviceCharge")
+	public void serviceCharge(AccountInput accountInput);
 
 }

@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,7 +16,6 @@ import com.cognizant.feign.AccountFeign;
 import com.cognizant.model.Account;
 import com.cognizant.model.AccountInput;
 import com.cognizant.model.RulesInput;
-import com.cognizant.service.RulesService;
 import com.cognizant.service.RulesServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -44,24 +43,22 @@ public class RulesController {
 		}
 	}
 
-	@PostMapping("/serviceCharges")
-	public ResponseEntity<?> serviceCharges(@RequestHeader("Authorization") String auth) {
-		log.info("Calculating Service Charge");
-		rulesService.hasPermission(auth);
+	@Scheduled(cron="0 0 9 LW * *")
+	public void serviceCharges() {
+		log.info("Deducting Monthly Service Charge");
 		try {
-			List<Account> accounts = accountFeign.getAllAccount(auth).getBody();
+			List<Account> accounts = accountFeign.getAllAccount();
 			for (Account account : accounts) {
-				double deduct = account.getBalance() / 0.02;
-				if (account.getBalance() < 1000 && (account.getBalance() - deduct) > 0)
-					log.info("Deducted");
-					accountFeign.servicecharge(auth, new AccountInput(account.getAccountNumber(), deduct));
+				double deduct  = account.getBalance() * 0.05;
+				if (account.getBalance() < 2500 && (account.getBalance() - deduct) > 0)
+					accountFeign.serviceCharge(new AccountInput(account.getAccountNumber(), deduct));
 			}
+			log.info("Deducted service charge");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		return ResponseEntity.ok(accountFeign.getAllAccount(auth).getBody());
+		log.info("I am running");
 	}
 
 	public ResponseEntity<String> evalMinimumBalanceFallback() {

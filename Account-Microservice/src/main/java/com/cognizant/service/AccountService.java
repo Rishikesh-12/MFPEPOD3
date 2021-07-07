@@ -11,6 +11,8 @@ public interface AccountService {
 
 
 	public List<Account> getCustomerAccount(String auth, String customerId);
+	
+	public List<Account> getAllAccounts();
 
 	public Account getAccount(long accountNumber);
 

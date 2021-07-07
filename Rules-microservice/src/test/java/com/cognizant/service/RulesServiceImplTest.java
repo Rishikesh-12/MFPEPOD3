@@ -38,14 +38,14 @@ class RulesServiceImplTest {
 	void evaluateTest2() {
 		RulesServiceImpl service = new RulesServiceImpl();
 		RulesInput in = new RulesInput(1000, 100, 10);
-		assertEquals(true, service.evaluate(in));
+		assertEquals(true, !service.evaluate(in));
 	}
 
 	@Test
 	void evaluateTest3() {
 		RulesServiceImpl service = new RulesServiceImpl();
 		RulesInput in = new RulesInput(1000, 1000, 100);
-		assertEquals(true, service.evaluate(in));
+		assertEquals(true, !service.evaluate(in));
 	}
 
 	@Test

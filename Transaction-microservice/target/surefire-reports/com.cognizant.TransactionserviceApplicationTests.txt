@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.cognizant.TransactionserviceApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.961 s - in com.cognizant.TransactionserviceApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 27.804 s - in com.cognizant.TransactionserviceApplicationTests

@@ -1,9 +1,0 @@
-com/cognizant/TransactionserviceApplicationTests.class
-com/cognizant/model/TransactionInputTest.class
-com/cognizant/model/ErrorDetailsTest.class
-com/cognizant/model/RulesInputTest.class
-com/cognizant/model/TransactionErrorResponseTest.class
-com/cognizant/model/AccountTest.class
-com/cognizant/model/AccountInputTest.class
-com/cognizant/entities/TransactionTest.class
-com/cognizant/model/AccountInputUtilTest.class
