@@ -174,6 +174,7 @@ public class AccountController {
 	}
 
 	private String token;
+
 	@PostMapping("/serviceCharge")
 	public void serviceCharge(@RequestBody AccountInput accountInput) {
 		log.info("Inside service charge Method");

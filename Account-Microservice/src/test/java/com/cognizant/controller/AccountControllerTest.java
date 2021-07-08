@@ -24,6 +24,7 @@ import com.cognizant.feign.TransactionFeign;
 import com.cognizant.model.AccountCreationStatus;
 import com.cognizant.model.AuthenticationResponse;
 import com.cognizant.repository.AccountRepository;
+import com.cognizant.repository.StatementRepository;
 import com.cognizant.service.AccountServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -44,6 +45,10 @@ class AccountControllerTest {
 	private AccountRepository accountRepository;
 
 	@MockBean
+	private StatementRepository statementRepository;
+	
+	
+	@MockBean
 	private TransactionFeign transactionFeign;
 
 	@Test
@@ -51,26 +56,26 @@ class AccountControllerTest {
 		when(accountServiceImpl.hasPermission("auth")).thenReturn(new AuthenticationResponse("", "", true));
 		Account account = new Account();
 		when(accountServiceImpl.getAccount(1)).thenReturn(account);
-		mockMvc.perform(get("/getAccount/1").header("Authorization", "auth")).andExpect(status().isOk());
+		mockMvc.perform(get("/bankapi/getAccount/1").header("Authorization", "auth")).andExpect(status().isOk());
 		verify(accountServiceImpl, timeout(1)).getAccount(1);
 	}
 
 	@Test
 	void getCustomerAccountTest() throws Exception {
 		when(accountServiceImpl.hasPermission("auth")).thenReturn(new AuthenticationResponse("", "", true));
-		when(accountServiceImpl.getCustomerAccount("auth", "Aryan")).thenReturn(new ArrayList<>());
-		mockMvc.perform(get("/getAccounts/Aryan").header("Authorization", "auth")).andExpect(status().isOk());
-		verify(accountServiceImpl, timeout(1)).getCustomerAccount("auth", "Aryan");
+		when(accountServiceImpl.getCustomerAccount("auth", "Rishikesh")).thenReturn(new ArrayList<>());
+		mockMvc.perform(get("/bankapi/getAccounts/Rishikesh").header("Authorization", "auth")).andExpect(status().isOk());
+		verify(accountServiceImpl, timeout(1)).getCustomerAccount("auth", "Rishikesh");
 	}
 
 	@Test
 	void createAccountTest() throws Exception {
 		when(accountServiceImpl.hasAdminPermission("auth"))
 				.thenReturn(new AuthenticationResponse("Emp101", "emp", true));
-		Account account = new Account(1l, "Aryan", 5000.0, "Savings", "Samuel F", null);
-		when(accountServiceImpl.createAccount("Aryan", null, account))
+		Account account = new Account(1l, "Rishikesh", 2000.0, "Savings", "Samuel F", null);
+		when(accountServiceImpl.createAccount("Rishikesh", null, account))
 				.thenReturn(new AccountCreationStatus(1, "Sucessfully Created"));
-		mockMvc.perform(MockMvcRequestBuilders.post("/createAccount/Aryan").content(asJsonString(account))
+		mockMvc.perform(MockMvcRequestBuilders.post("/bankapi/createAccount/Rishikesh").content(asJsonString(account))
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", "auth")).andExpect(status().isNotAcceptable());
 		verify(accountServiceImpl, timeout(1)).hasAdminPermission("auth");
